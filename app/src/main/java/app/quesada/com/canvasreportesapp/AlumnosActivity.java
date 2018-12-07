@@ -13,9 +13,11 @@ import android.widget.Toast;
 import java.util.List;
 
 import app.quesada.com.canvasreportesapp.Adapters.AlumnosAdapter;
+import app.quesada.com.canvasreportesapp.Adapters.CursosAdapter;
 import app.quesada.com.canvasreportesapp.Singleton.ApiServiceGenerator;
 import app.quesada.com.canvasreportesapp.interfaces.ApiService;
 import app.quesada.com.canvasreportesapp.models.Alumno;
+import app.quesada.com.canvasreportesapp.models.Curso;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,13 +36,14 @@ public class AlumnosActivity extends AppCompatActivity {
 
         //Esto elimina el toolbar de la app
         //getSupportActionBar().hide();
+        setTitle("Alumnos");
 
         alumnosList = findViewById(R.id.recyclerview);
         alumnosList.setLayoutManager(new LinearLayoutManager(this));
 
         alumnosList.setAdapter(new AlumnosAdapter());
 
-        course_id = getIntent().getExtras().getInt("ID");
+        course_id = Integer.parseInt(getIntent().getExtras().getString("ID"));
         Log.e(TAG, "id:" + course_id);
 
         initialize();

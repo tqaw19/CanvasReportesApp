@@ -1,13 +1,22 @@
 package app.quesada.com.canvasreportesapp;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.PopupMenu;
 import android.widget.Toast;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -23,86 +32,50 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private RecyclerView cursosList;
-
-    private static final int REGISTER_FORM_REQUEST = 100;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Hide status bar
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        //Esto elimina el toolbar de la app
-        getSupportActionBar().hide();
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        cursosList = findViewById(R.id.recyclerview);
-        cursosList.setLayoutManager(new LinearLayoutManager(this));
+        Bundle bundle = new Bundle();
+        bundle.putString("fullname", "Danilo Lopez");
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
 
-        cursosList.setAdapter(new CursosAdapter());
+        mFirebaseAnalytics.setUserProperty("username", "dlopez");
 
-        initialize();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        Log.d(TAG, "user: " + user);
     }
-
-    private void initialize() {
-
-        ApiService service = ApiServiceGenerator.createService(ApiService.class);
-
-        Call<List<Curso>> call = service.getCursos();
-
-        call.enqueue(new Callback<List<Curso>>() {
-            @Override
-            public void onResponse(Call<List<Curso>> call, Response<List<Curso>> response) {
-                try {
-
-                    int statusCode = response.code();
-                    Log.d(TAG, "HTTP status code: " + statusCode);
-
-                    if (response.isSuccessful()) {
-
-                        List<Curso> cursos = response.body();
-                        Log.d(TAG, "cursos: " + cursos);
-
-                        CursosAdapter adapter = (CursosAdapter) cursosList.getAdapter();
-                        adapter.setCursos(cursos);
-                        adapter.notifyDataSetChanged();
-
-                    } else {
-                        Log.e(TAG, "onError: " + response.errorBody().string());
-                        throw new Exception("Error en el servicio");
-                    }
-
-                } catch (Throwable t) {
-                    try {
-                        Log.e(TAG, "onThrowable: " + t.toString(), t);
-                        Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                    }catch (Throwable x){}
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Curso>> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.toString());
-                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-
-        });
-    }
-
-    /**
-     * 3ra ShowRegister
-     * public void showRegister(View view){
-     startActivityForResult(new Intent(this, RegisterActivity.class), REGISTER_FORM_REQUEST);
-     }
-     */
-
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REGISTER_FORM_REQUEST) {
-            // refresh data
-            initialize();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                callLogout(null);
+                return true;
         }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void callLogout(View view){
+        Log.d(TAG, "Sign out user");
+        FirebaseAuth.getInstance().signOut();
+        finish();
     }
 
 }
+
 

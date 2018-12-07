@@ -12,17 +12,18 @@ import java.util.List;
 
 import app.quesada.com.canvasreportesapp.R;
 import app.quesada.com.canvasreportesapp.models.Alumno;
+import app.quesada.com.canvasreportesapp.models.Enrollment;
 
-public class AlumnosAdapter extends RecyclerView.Adapter<AlumnosAdapter.ViewHolder>{
-    private List<Alumno> alumnos;
+public class EnrollmentsAdapter extends RecyclerView.Adapter<EnrollmentsAdapter.ViewHolder>{
+    private List<Enrollment> enrollments;
 
-    public AlumnosAdapter(){
+    public EnrollmentsAdapter(){
 
-        this.alumnos = new ArrayList<>();
-    }
+        this.enrollments = new ArrayList<>();
+    } 
 
-    public void setAlumnos(List<Alumno> alumnos){
-        this.alumnos= alumnos;
+    public void setEnrollments(List<Enrollment> enrollments){
+        this.enrollments= enrollments;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -40,29 +41,28 @@ public class AlumnosAdapter extends RecyclerView.Adapter<AlumnosAdapter.ViewHold
     }
 
     @Override
-    public AlumnosAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_alumno, parent, false);
-        return new ViewHolder(itemView);
+    public EnrollmentsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_enrollment, parent, false);
+        return new EnrollmentsAdapter.ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(AlumnosAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(EnrollmentsAdapter.ViewHolder viewHolder, int position) {
 
-        Alumno alumno = this.alumnos.get(position);
+        Enrollment enrollment = this.enrollments.get(position);
 
-        viewHolder.correoText.setText( "Id de alumno: "+alumno.getIntegration_id());
-        viewHolder.nombreText.setText(alumno.getName());
+        viewHolder.correoText.setText( "UserID: "+enrollment.getUser_id());
+        viewHolder.nombreText.setText(enrollment.getGrades().getCurrent_score());
 
 
         /*
          String url = ApiService.API_BASE_URL + "/solicitudes/images/" + curso.getCaptura();
         Picasso.with(viewHolder.itemView.getContext()).load(url).into(viewHolder.fotoImage);
          */
-
     }
 
     @Override
     public int getItemCount() {
-        return this.alumnos.size();
+        return this.enrollments.size();
     }
 }

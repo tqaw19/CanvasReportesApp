@@ -1,7 +1,9 @@
 package app.quesada.com.canvasreportesapp.Adapters;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +15,23 @@ import java.util.List;
 
 import app.quesada.com.canvasreportesapp.AlumnosActivity;
 import app.quesada.com.canvasreportesapp.R;
-import app.quesada.com.canvasreportesapp.interfaces.ApiService;
+
 import app.quesada.com.canvasreportesapp.models.Curso;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CursosAdapter extends RecyclerView.Adapter<CursosAdapter.ViewHolder>{
 
     private static final String TAG = CursosAdapter.class.getSimpleName();
 
+    private AlumnosActivity activity;
+
     private List<Curso> cursos;
 
     public CursosAdapter(){
+
+        this.activity = activity;
         this.cursos = new ArrayList<>();
     }
 
@@ -53,6 +62,7 @@ public class CursosAdapter extends RecyclerView.Adapter<CursosAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final CursosAdapter.ViewHolder viewHolder, final int position) {
 
+        final Context context = viewHolder.itemView.getContext();
         final Curso curso = this.cursos.get(position);
 
         viewHolder.correoText.setText( "ID: "+curso.getId());
@@ -61,9 +71,10 @@ public class CursosAdapter extends RecyclerView.Adapter<CursosAdapter.ViewHolder
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(viewHolder.itemView.getContext(), AlumnosActivity.class);
+                Intent intent = new Intent(context, AlumnosActivity.class);
                 intent.putExtra("ID", curso.getId());
-                activity.startActivity(intent);
+                context.startActivity(intent);
+
             }
         });
 
@@ -79,4 +90,3 @@ public class CursosAdapter extends RecyclerView.Adapter<CursosAdapter.ViewHolder
         return this.cursos.size();
     }
 }
-
