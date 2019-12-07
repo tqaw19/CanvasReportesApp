@@ -34,7 +34,7 @@ public class AlumnosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alumnos);
 
-        //Esto elimina el toolbar de la app
+        //Sets title show Title Bar to false.
         //getSupportActionBar().hide();
         setTitle("Alumnos");
 

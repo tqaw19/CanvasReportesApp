@@ -42,7 +42,8 @@ public class EnrollmentsAdapter extends RecyclerView.Adapter<EnrollmentsAdapter.
 
     @Override
     public EnrollmentsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_enrollment, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_enrollment, parent, false);
         return new EnrollmentsAdapter.ViewHolder(itemView);
     }
 
@@ -51,7 +52,7 @@ public class EnrollmentsAdapter extends RecyclerView.Adapter<EnrollmentsAdapter.
 
         Enrollment enrollment = this.enrollments.get(position);
 
-        viewHolder.correoText.setText( "UserID: "+enrollment.getUser_id());
+        viewHolder.correoText.setText( "UserID: "+enrollment.getUser());
         viewHolder.nombreText.setText(enrollment.getGrades().getCurrent_score());
 
 

@@ -55,7 +55,8 @@ public class CursosAdapter extends RecyclerView.Adapter<CursosAdapter.ViewHolder
 
     @Override
     public CursosAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_curso, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_curso, parent, false);
         return new ViewHolder(itemView);
     }
 
